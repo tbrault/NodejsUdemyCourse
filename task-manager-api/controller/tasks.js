@@ -6,8 +6,16 @@ const getAllTasks = (req, res) => {
 
 const createTask = (req, res) => {};
 
-const modifyTask = (req, res) => {};
+const getSingleTask = (req, res) => {};
+
+const updateTask = (req, res) => {};
 
 const deleteTask = (req, res) => {};
 
-module.exports = { getAllTasks, createTask, modifyTask, deleteTask };
+module.exports = {
+  getAllTasks,
+  createTask,
+  getSingleTask,
+  updateTask,
+  deleteTask,
+};
