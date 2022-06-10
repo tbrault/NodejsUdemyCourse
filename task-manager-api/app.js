@@ -11,8 +11,8 @@ const port = "5000";
 //middleware
 app.use(express.static("./public"));
 app.use(express.json());
-app.use(notFound);
 app.use("/api/v1/tasks", tasks);
+app.use(notFound);
 
 //init app
 const start = async () => {
