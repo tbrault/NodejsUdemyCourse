@@ -13,6 +13,4 @@ const TaskSchema = new mongoose.Schema({
   },
 });
 
-//test git
-
 module.exports = mongoose.model("Task", TaskSchema);
