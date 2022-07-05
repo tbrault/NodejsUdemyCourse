@@ -21,7 +21,7 @@ const getSingleTask = asyncWrapper(async (req, res, next) => {
   res.status(200).json({ task });
 });
 
-const updateTask = asyncWrapper(async (req, res) => {
+const updateTask = asyncWrapper(async (req, res, next) => {
   const { id: taskId } = req.params;
   const task = await Task.findByIdAndUpdate(taskId, req.body, {
     new: true,
@@ -33,7 +33,7 @@ const updateTask = asyncWrapper(async (req, res) => {
   res.status(200).json({ task });
 });
 
-const deleteTask = asyncWrapper(async (req, res) => {
+const deleteTask = asyncWrapper(async (req, res, next) => {
   const { id: taskId } = req.params;
   const task = await Task.findByIdAndDelete(taskId);
 
