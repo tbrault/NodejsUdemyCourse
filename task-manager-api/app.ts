@@ -1,10 +1,10 @@
 //import modules
-const express = require("express");
+import express from "express";
 const app = express();
-const tasks = require("./routes/tasks");
-const connectDb = require("./db/connect");
-const notFound = require("./middleware/not-found");
-const errorHandlerMiddleware = require("./middleware/error-handler");
+import tasks from "./routes/tasks";
+import connectDb from "./db/connect";
+import notFound from "./middleware/not-found";
+import errorHandlerMiddleware from "./middleware/error-handler";
 require("dotenv").config();
 
 const port = process.env.PORT || "5000";
