@@ -1,4 +1,11 @@
-const errorHandlerMiddleware = (err, req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+
+const errorHandlerMiddleware = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   console.log(err);
   return res
     .status(500)
