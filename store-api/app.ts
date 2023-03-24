@@ -15,7 +15,7 @@ app.use("/api/v1/products", products);
 app.use(notFound);
 app.use(errorHandlerMiddleware);
 
-const start = async () => {
+async function start() {
   try {
     await connectDb(process.env.MONGO_URI!);
     app.listen(port, () =>
@@ -24,6 +24,6 @@ const start = async () => {
   } catch (error) {
     console.log(error);
   }
-};
+}
 
 start();
