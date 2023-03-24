@@ -2,6 +2,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 
 import connectDb from "./db/connect.js";
+import products from "./routes/products.js";
 import notFound from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 
@@ -9,6 +10,7 @@ const app = express();
 dotenv.config();
 const port = process.env.PORT || "5000";
 
+app.use("/api/v1/products", products);
 app.use(notFound);
 app.use(errorHandlerMiddleware);
 
