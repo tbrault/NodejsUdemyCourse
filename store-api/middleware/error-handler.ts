@@ -6,10 +6,7 @@ const errorHandlerMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(err);
-  return res
-    .status(500)
-    .json({ msg: "Something went wrong, please try again" });
+  return res.status(500).json({ msg: err });
 };
 
 export default errorHandlerMiddleware;
