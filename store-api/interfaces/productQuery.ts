@@ -1,12 +1,13 @@
 interface ProductQuery {
   [key: string]: string | boolean | Object | undefined;
   featured?: boolean;
-  company?: string;
   name?: {
     $regex: string;
     $options: string;
   };
-  rating?: string;
+  company?: string;
+  price?: number;
+  rating?: number;
 }
 
 export default ProductQuery;
