@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
+import { stringify } from "querystring";
 import ProductQuery from "../interfaces/productQuery.js";
 import Product from "../models/product.js";
+
+interface OperatorMap {
+  [key: string]: string;
+}
 
 const getAllStaticProducts = async (req: Request, res: Response) => {
   const productsQueryObj = Product.find({ company: "marcos" });
@@ -33,7 +38,7 @@ const getAllStaticProducts = async (req: Request, res: Response) => {
 };
 
 async function getAllProducts(req: Request, res: Response) {
-  const { featured, name, company, sort, fields } = req.query;
+  const { featured, name, company, sort, fields, numericFilters } = req.query;
   const productQuery: ProductQuery = {};
 
   if (featured) {
@@ -47,6 +52,28 @@ async function getAllProducts(req: Request, res: Response) {
       $regex: name,
       $options: "i",
     };
+  }
+
+  if (numericFilters && typeof numericFilters === "string") {
+    const operatorUsedInNumericFilters: OperatorMap = {
+      ">": "$gt",
+      ">=": "$gte",
+      "=": "$eq",
+      "<": "lt",
+      "<=": "lte",
+    };
+    const regEx = /\b(>|>=|=|<=|<)\b/g;
+    let filters = numericFilters.replace(
+      regEx,
+      (match) => `-${operatorUsedInNumericFilters[match]}-`
+    );
+    const options = ["price", "rating"];
+    filters.split(",").forEach((item) => {
+      const [field, operator, value] = item.split("-");
+      if (options.includes(field)) {
+        productQuery[field] = { [operator]: Number(value) };
+      }
+    });
   }
 
   let result = Product.find(productQuery);
