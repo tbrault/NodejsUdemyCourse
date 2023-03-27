@@ -86,7 +86,12 @@ async function getAllProducts(req: Request, res: Response) {
 }
 
 async function filterResultOfQuery(res: Response, result: any) {
-  const { fields } = res.req.query;
+  const { sort, fields } = res.req.query;
+
+  if (sort && typeof sort === "string") {
+    const sortList = sort.replaceAll(",", " ");
+    result = result.sort(sortList);
+  }
 
   if (fields && typeof fields === "string") {
     const fieldsList = fields.replaceAll(",", " ");
