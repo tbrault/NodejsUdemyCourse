@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import ProductQuery from "../interfaces/productQuery.js";
-import Product from "../models/product.js";
+import QueryParams from "../interfaces/QueryParams.js";
+import ProductQuery from "../models/ProductQuery.js";
+import Product from "../models/schemas/product.js";
 
 const getAllStaticProducts = async (req: Request, res: Response) => {
   const productsQueryObj = Product.find({ company: "marcos" });
@@ -32,57 +33,22 @@ const getAllStaticProducts = async (req: Request, res: Response) => {
   });
 };
 
-class QueryBuilder {
-  private static readonly operatorMap: Record<string, string> = {
-    ">": "$gt",
-    ">=": "$gte",
-    "=": "$eq",
-    "<": "$lt",
-    "<=": "$lte",
-  };
-
-  static build(queryParams: any) {
-    const productQuery: ProductQuery = {};
-    const { featured, name, company, numericFilters } = queryParams;
-
-    if (featured) {
-      productQuery.featured = featured === "true";
-    }
-
-    if (company && typeof company === "string") {
-      productQuery.company = company;
-    }
-
-    if (name && typeof name === "string") {
-      productQuery.name = {
-        $regex: name,
-        $options: "i",
-      };
-    }
-
-    if (numericFilters && typeof numericFilters === "string") {
-      const regEx = /\b(>|>=|=|<=|<)\b/g;
-      let filters = numericFilters.replace(
-        regEx,
-        (match) => `-${QueryBuilder.operatorMap[match]}-`
-      );
-      const options = ["price", "rating"];
-      filters.split(",").forEach((item) => {
-        const [field, operator, value] = item.split("-");
-        if (options.includes(field)) {
-          productQuery[field] = { [operator]: Number(value) };
-        }
-      });
-    }
-
-    return productQuery;
-  }
-}
-
 async function getAllProducts(req: Request, res: Response) {
-  const productQuery = QueryBuilder.build(req.query);
+  const productQuery = buildProductQuery(req.query);
   let result = Product.find(productQuery);
   await filterResultOfQuery(res, result);
+}
+
+function buildProductQuery(queryParams: QueryParams) {
+  const { featured, name, company, numericFilters } = queryParams;
+  const productQuery = new ProductQuery();
+
+  productQuery.addFeaturedFilter(featured);
+  productQuery.addCompanyFilter(company);
+  productQuery.addNamesFilter(name);
+  productQuery.addNumericFilters(numericFilters);
+
+  return productQuery;
 }
 
 async function filterResultOfQuery(res: Response, result: any) {

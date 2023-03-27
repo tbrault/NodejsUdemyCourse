@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import connectDb from "./db/connect.js";
-import Products from "./models/product.js";
+import Products from "./models/schemas/product.js";
 
 import jsonProducts from "./products.json" assert { type: "json" };
 
