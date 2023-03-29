@@ -5,6 +5,7 @@ import authRouter from "./routes/auth.js";
 import jobsRouter from "./routes/jobs.js";
 import getNotFoundPage from "./middlewares/not-found.js";
 import handleErrors from "./middlewares/error-handler.js";
+import connectDb from "./db/connect.js";
 
 const app = express();
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(handleErrors);
 
 async function start() {
   try {
+    await connectDb(process.env.MONGO_URI!);
     app.listen(port, () =>
       console.log(`server is listening on port ${port}....`)
     );
