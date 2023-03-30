@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import User from "../interfaces/User.js";
+import bcrypt from "bcrypt";
 
 const User = new Schema<User>({
   name: {
@@ -23,6 +24,10 @@ const User = new Schema<User>({
     required: [true, "Password must be provided"],
     minlength: 6,
   },
+});
+
+User.pre("save", async function () {
+  this.password = await bcrypt.hash(this.password, 10);
 });
 
 export default model<User>("User", User);
