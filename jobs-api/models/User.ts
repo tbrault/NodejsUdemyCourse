@@ -43,4 +43,8 @@ User.methods.generateToken = function () {
   );
 };
 
+User.methods.checkPassword = async function (candidatePassword: string) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
 export default model<User>("User", User);
