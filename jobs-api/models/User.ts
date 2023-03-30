@@ -1,3 +1,5 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import { Schema, model } from "mongoose";
 import User from "../interfaces/User.js";
 import bcrypt from "bcrypt";
@@ -32,9 +34,13 @@ User.pre("save", async function () {
 });
 
 User.methods.generateToken = function () {
-  return jwt.sign({ userId: this._id, name: this.name }, "secret", {
-    expiresIn: "30d",
-  });
+  return jwt.sign(
+    { userId: this._id, name: this.name },
+    process.env.JWT_SECRET!,
+    {
+      expiresIn: process.env.JWT_LIFETIME,
+    }
+  );
 };
 
 export default model<User>("User", User);
