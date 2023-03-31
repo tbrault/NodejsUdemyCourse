@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import BadRequestError from "../errors/badRequest.js";
-import UnauthenticatedError from "../errors/unauthenticated.js";
+import { BadRequestError, UnauthenticatedError } from "../errors/index.js";
 import User from "../models/User.js";
 
 async function registerUser(req: Request, res: Response) {

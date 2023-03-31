@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 
 import CustomRequest from "../interfaces/CustomRequest.js";
 import Job from "../models/Job.js";
-import BadRequestError from "../errors/badRequest.js";
+import { BadRequestError, NotFounderror } from "../errors/index.js";
 
 async function getAllJobs(req: CustomRequest, res: Response) {
   if (!req.user) {
@@ -25,16 +25,45 @@ async function createSingleJob(req: CustomRequest, res: Response) {
   res.status(StatusCodes.CREATED).json({ job });
 }
 
-async function getSingleJob(req: Request, res: Response) {
-  res.status(StatusCodes.OK).send("getSingleJob");
+async function getSingleJob(req: CustomRequest, res: Response) {
+  if (!req.user) {
+    throw new BadRequestError("No user provided");
+  }
+  const {
+    user: { userId },
+    params: { id: jobId },
+  } = req;
+  const job = await Job.findOne({ _id: jobId, createdBy: userId });
+  if (!job) {
+    throw new NotFounderror(`No job found with id : ${jobId}`);
+  }
+  res.status(StatusCodes.OK).json({ job });
 }
 
-async function deleteSingleJob(req: Request, res: Response) {
+async function deleteSingleJob(req: CustomRequest, res: Response) {
+  if (!req.user) {
+    throw new BadRequestError("No user provided");
+  }
   res.status(StatusCodes.OK).send("deleteSingleJob");
 }
 
-async function updateSingleJob(req: Request, res: Response) {
-  res.status(StatusCodes.OK).send("updateSingleJob");
+async function updateSingleJob(req: CustomRequest, res: Response) {
+  if (!req.user) {
+    throw new BadRequestError("No user provided");
+  }
+  const {
+    user: { userId },
+    params: { id: jobId },
+  } = req;
+  const job = await Job.findByIdAndUpdate({
+    _id: jobId,
+    createdBy: userId,
+    ...req.body,
+  });
+  if (!job) {
+    throw new NotFounderror(`No job found with id : ${jobId}`);
+  }
+  res.status(StatusCodes.OK).json({ job });
 }
 
 export {
