@@ -1,6 +1,8 @@
+import { ObjectId } from "mongoose";
+
 interface Token {
   name: string;
-  userId: number;
+  userId: ObjectId;
 }
 
 export default Token;

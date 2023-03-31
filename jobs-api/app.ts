@@ -1,6 +1,7 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import "express-async-errors";
+import validateAuthentication from "./middlewares/auth.js";
 import authRouter from "./routes/auth.js";
 import jobsRouter from "./routes/jobs.js";
 import getNotFoundPage from "./middlewares/not-found.js";
@@ -13,7 +14,7 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/jobs", jobsRouter);
+app.use("/api/v1/jobs", validateAuthentication, jobsRouter);
 app.use(getNotFoundPage);
 app.use(handleErrors);
 

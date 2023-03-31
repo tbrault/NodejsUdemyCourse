@@ -1,8 +1,9 @@
 import { Request } from "express";
+import { ObjectId } from "mongoose";
 
 interface CustomRequest extends Request {
   user?: {
-    userId: number;
+    userId: ObjectId;
     name: string;
   };
 }
