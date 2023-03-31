@@ -44,7 +44,16 @@ async function deleteSingleJob(req: CustomRequest, res: Response) {
   if (!req.user) {
     throw new BadRequestError("No user provided");
   }
-  res.status(StatusCodes.OK).send("deleteSingleJob");
+  const {
+    user: { userId },
+    params: { id: jobId },
+  } = req;
+  const job = await Job.findByIdAndRemove({ _id: jobId, createdBy: userId });
+  if (!job) {
+    throw new NotFounderror(`No job found with id : ${jobId}`);
+  }
+
+  res.status(StatusCodes.OK).send();
 }
 
 async function updateSingleJob(req: CustomRequest, res: Response) {
