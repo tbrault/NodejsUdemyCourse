@@ -4,7 +4,7 @@ import "express-async-errors";
 import validateAuthentication from "./middlewares/auth.js";
 import authRouter from "./routes/auth.js";
 import jobsRouter from "./routes/jobs.js";
-import getNotFoundPage from "./middlewares/not-found.js";
+import getNotFoundPage from "./middlewares/page-not-found.js";
 import handleErrors from "./middlewares/error-handler.js";
 import connectDb from "./db/connect.js";
 
